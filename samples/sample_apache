@@ -1,0 +1,5 @@
+{
+    "query_template": {"aggs":{"2":{"terms":{"field":"geoip.country_name.keyword","order":{"3":"desc"},"missing":"__missing__","size":30},"aggs":{"3":{"avg":{"field":"bytes"}},"4":{"percentiles":{"field":"bytes","percents":[5,50,95],"keyed":false}}}}},"size":0,"_source":{"excludes":[]},"stored_fields":["*"],"script_fields":{},"docvalue_fields":[{"field":"@timestamp","format":"date_time"}],"query":{"bool":{"must":[{"range":{"@timestamp":{"format":"epoch_millis","gte":"###GTE###","lte":"###LTE###"}}}],"filter":[{"bool":{"should":[{"match":{"verb":"GET"}}],"minimum_should_match":1}},{"match_all":{}}],"should":[],"must_not":[{"match_phrase":{"tags":{"query":"_grokparsefailure"}}},{"match_phrase":{"tags":{"query":"_grokparsefailure"}}},{"match_phrase":{"tags":{"query":"_geoip_lookup_failure"}}}]}},"timeout":"30000ms"},
+    "query_headers": ["Country","number","average","5th percentile of bytes","50th percentile of bytes","95th percentile of bytes"],
+    "query_rows": ".aggregations.\"2\".buckets[] | [ .key, .doc_count, .\"3\".value, .\"4\".values[].value ]"
+}
